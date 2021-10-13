@@ -5,13 +5,24 @@ defmodule UrlShortnrWeb.ShortLinkLive.Index do
   alias UrlShortnr.ShortLinks.ShortLink
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, session, socket) do
+
+
     {:ok, assign(socket, :short_links, list_short_links())}
   end
 
   @impl true
-  def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  def handle_params(params, url, socket) do
+    # https://github.com/phoenixframework/phoenix_live_view/issues/1389#issuecomment-808879444
+    parsed_url = URI.parse(url)
+    app_url = "#{parsed_url.scheme}://#{parsed_url.host}:#{parsed_url.port}"
+
+    socket =
+      socket
+      |> assign(app_url: app_url)
+      |> apply_action(socket.assigns.live_action, params)
+
+    {:noreply, socket}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

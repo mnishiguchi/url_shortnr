@@ -13,7 +13,7 @@
   <thead>
     <tr>
       <th>Key</th>
-      <th>Url</th>
+      <th>Destination</th>
       <th>Hit count</th>
 
       <th></th>
@@ -22,7 +22,8 @@
   <tbody id="short_links">
     <%= for short_link <- @short_links do %>
       <tr id={"short_link-#{short_link.id}"}>
-        <td><%= short_link.key %></td>
+        <% short_link_url = "#{@app_url}/#{short_link.key}" %>
+        <td><%= link short_link.key, to: short_link_url, target: "_blank" %></td>
         <td><%= short_link.url %></td>
         <td><%= short_link.hit_count %></td>
 
