@@ -1,0 +1,7 @@
+defmodule UrlShortnrWeb.PageController do
+  use UrlShortnrWeb, :controller
+
+  def index(conn, _params) do
+    render(conn, "index.html")
+  end
+end
