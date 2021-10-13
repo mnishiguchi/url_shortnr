@@ -1,0 +1,28 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="short_link-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save">
+  
+    <%= label f, :key %>
+    <%= text_input f, :key %>
+    <%= error_tag f, :key %>
+  
+    <%= label f, :url %>
+    <%= textarea f, :url %>
+    <%= error_tag f, :url %>
+  
+    <%= label f, :hit_count %>
+    <%= number_input f, :hit_count %>
+    <%= error_tag f, :hit_count %>
+  
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
+</div>

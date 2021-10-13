@@ -1,0 +1,32 @@
+<h1>Show Short link</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal UrlShortnrWeb.ShortLinkLive.FormComponent,
+    id: @short_link.id,
+    title: @page_title,
+    action: @live_action,
+    short_link: @short_link,
+    return_to: Routes.short_link_show_path(@socket, :show, @short_link) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @short_link.key %>
+  </li>
+
+  <li>
+    <strong>Url:</strong>
+    <%= @short_link.url %>
+  </li>
+
+  <li>
+    <strong>Hit count:</strong>
+    <%= @short_link.hit_count %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.short_link_show_path(@socket, :edit, @short_link), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.short_link_index_path(@socket, :index) %></span>
