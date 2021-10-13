@@ -37,6 +37,8 @@ defmodule UrlShortnr.ShortLinks do
   """
   def get_short_link!(id), do: Repo.get!(ShortLink, id)
 
+  def get_short_link_by_key(key), do: Repo.get_by(ShortLink, key: key)
+
   @doc """
   Creates a short_link.
 
@@ -50,9 +52,28 @@ defmodule UrlShortnr.ShortLinks do
 
   """
   def create_short_link(attrs \\ %{}) do
+    attrs = maybe_assign_random_key(attrs)
+
     %ShortLink{}
     |> ShortLink.changeset(attrs)
     |> Repo.insert()
+  rescue
+    # Retry in case the same key already exists in database
+    Ecto.ConstraintError ->
+      create_short_link(attrs)
+  end
+
+  defp maybe_assign_random_key(attrs) do
+    case attrs["key"] do
+      "" -> Map.put(attrs, "key", random_string(8))
+      _key -> attrs
+    end
+  end
+
+  defp random_string(length) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.url_encode64()
+    |> binary_part(0, length)
   end
 
   @doc """
@@ -71,6 +92,10 @@ defmodule UrlShortnr.ShortLinks do
     short_link
     |> ShortLink.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_hit_count(short_link) do
+    update_short_link(short_link, %{hit_count: short_link.hit_count + 1})
   end
 
   @doc """

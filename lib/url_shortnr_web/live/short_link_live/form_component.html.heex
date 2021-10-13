@@ -8,19 +8,15 @@
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save">
-  
-    <%= label f, :key %>
-    <%= text_input f, :key %>
-    <%= error_tag f, :key %>
-  
+
     <%= label f, :url %>
     <%= textarea f, :url %>
     <%= error_tag f, :url %>
-  
-    <%= label f, :hit_count %>
-    <%= number_input f, :hit_count %>
-    <%= error_tag f, :hit_count %>
-  
+
+    <%= label f, :key %>
+    <%= text_input f, :key %>
+    <%= error_tag f, :key %>
+
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>
     </div>
