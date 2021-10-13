@@ -24,6 +24,7 @@ defmodule UrlShortnrWeb.Router do
     live "/short_links/:id", ShortLinkLive.Show, :show
     live "/short_links/:id/show/edit", ShortLinkLive.Show, :edit
 
+    get "/:key", ShortLinkRedirectController, :index
     get "/", PageController, :index
   end
 
