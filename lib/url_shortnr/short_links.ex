@@ -7,6 +7,7 @@ defmodule UrlShortnr.ShortLinks do
   alias UrlShortnr.Repo
 
   alias UrlShortnr.ShortLinks.ShortLink
+  alias UrlShortnr.ShortLinks.PubSub
 
   @doc """
   Returns the list of short_links.
@@ -57,6 +58,7 @@ defmodule UrlShortnr.ShortLinks do
     %ShortLink{}
     |> ShortLink.changeset(attrs)
     |> Repo.insert()
+    |> PubSub.broadcast_record(:short_link_inserted)
   rescue
     # Retry in case the same key already exists in database
     Ecto.ConstraintError ->
@@ -92,6 +94,7 @@ defmodule UrlShortnr.ShortLinks do
     short_link
     |> ShortLink.changeset(attrs)
     |> Repo.update()
+    |> PubSub.broadcast_record(:short_link_updated)
   end
 
   def update_hit_count(short_link) do
@@ -112,6 +115,7 @@ defmodule UrlShortnr.ShortLinks do
   """
   def delete_short_link(%ShortLink{} = short_link) do
     Repo.delete(short_link)
+    |> PubSub.broadcast_record(:short_link_deleted)
   end
 
   @doc """

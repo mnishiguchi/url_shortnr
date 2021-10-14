@@ -19,7 +19,7 @@
       <th></th>
     </tr>
   </thead>
-  <tbody id="short_links">
+  <tbody id="short_links" phx-update="prepend" phx-hook="ShortLinkTable">
     <%= for short_link <- @short_links do %>
       <tr id={"short_link-#{short_link.id}"}>
         <% short_link_url = "#{@app_url}/#{short_link.key}" %>
