@@ -75,6 +75,7 @@ defmodule UrlShortnr.ShortLinks do
   defp random_string(length) do
     :crypto.strong_rand_bytes(length)
     |> Base.url_encode64()
+    |> String.replace(~r/[-_\=]/, "")
     |> binary_part(0, length)
   end
 
