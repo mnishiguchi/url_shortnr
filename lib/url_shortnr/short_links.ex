@@ -19,7 +19,8 @@ defmodule UrlShortnr.ShortLinks do
 
   """
   def list_short_links do
-    Repo.all(ShortLink)
+    query = from x in ShortLink, order_by: [desc: x.id]
+    Repo.all(query)
   end
 
   @doc """
@@ -65,10 +66,12 @@ defmodule UrlShortnr.ShortLinks do
       create_short_link(attrs)
   end
 
+  # Generates and assigns a random key when key is blank.
   defp maybe_assign_random_key(attrs) do
-    case attrs["key"] do
-      "" -> Map.put(attrs, "key", random_string(8))
-      _key -> attrs
+    if attrs["key"] in [nil, ""] do
+      Map.put(attrs, "key", random_string(8))
+    else
+      attrs
     end
   end
 

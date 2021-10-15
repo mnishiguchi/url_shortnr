@@ -1,8 +1,7 @@
-defmodule UrlShortnrWeb.ShortLinkLive.Index do
+defmodule UrlShortnrWeb.ShortLinkPublicLive do
   use UrlShortnrWeb, :live_view
 
   alias UrlShortnr.ShortLinks
-  alias UrlShortnr.ShortLinks.ShortLink
   alias UrlShortnr.ShortLinks.PubSub
 
   @impl true
@@ -29,29 +28,53 @@ defmodule UrlShortnrWeb.ShortLinkLive.Index do
   defp assign_url(socket, url) do
     # https://github.com/phoenixframework/phoenix_live_view/issues/1389#issuecomment-808879444
     parsed_url = URI.parse(url)
-    app_url = "#{parsed_url.scheme}://#{parsed_url.host}:#{parsed_url.port}"
+
+    app_url =
+      if Mix.env() in [:dev, :test] do
+        "http://#{parsed_url.host}:#{parsed_url.port}"
+      else
+        "https://#{parsed_url.host}"
+      end
 
     socket
     |> assign(app_url: app_url)
     |> assign(current_path: parsed_url.path)
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Short link")
-    |> assign(:short_link, ShortLinks.get_short_link!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Short link")
-    |> assign(:short_link, %ShortLink{})
-  end
-
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Short links")
     |> assign(:short_link, nil)
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <%= live_component(@socket, UrlShortnrWeb.ShortLinkPublicLive.FormComponent,
+      id: :stateful,
+      action: @live_action) %>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Shortened URL</th>
+          <th>Hits</th>
+        </tr>
+      </thead>
+      <tbody id="short_links" phx-update="prepend" phx-hook="ShortLinkTable">
+        <%= for short_link <- @short_links do %>
+          <tr id={"short_link-#{short_link.id}"}>
+            <td style="overflow-x:auto;max-width:33vw"><%= short_link.url %></td>
+            <% shortened_url = "#{@app_url}/#{short_link.key}" %>
+            <td style="overflow-x:auto"><%= link shortened_url, to: shortened_url, target: "_blank" %></td>
+            <td><%= short_link.hit_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <span><%= live_patch "Admin", to: Routes.short_link_index_path(@socket, :index) %></span>
+    """
   end
 
   ## UI events

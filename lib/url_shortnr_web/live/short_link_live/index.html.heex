@@ -14,7 +14,7 @@
     <tr>
       <th>Key</th>
       <th>Destination</th>
-      <th>Hit count</th>
+      <th>Hits</th>
 
       <th></th>
     </tr>
@@ -24,11 +24,10 @@
       <tr id={"short_link-#{short_link.id}"}>
         <% short_link_url = "#{@app_url}/#{short_link.key}" %>
         <td><%= link short_link.key, to: short_link_url, target: "_blank" %></td>
-        <td><%= short_link.url %></td>
+        <td style="overflow-x:auto;max-width:33vw"><%= short_link.url %></td>
         <td><%= short_link.hit_count %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.short_link_show_path(@socket, :show, short_link) %></span>
           <span><%= live_patch "Edit", to: Routes.short_link_index_path(@socket, :edit, short_link) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: short_link.id, data: [confirm: "Are you sure?"] %></span>
         </td>

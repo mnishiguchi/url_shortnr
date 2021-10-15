@@ -10,7 +10,7 @@ defmodule UrlShortnrWeb.ShortLinkRedirectController do
       nil ->
         conn
         |> put_flash(:error, "Invalid short link")
-        |> redirect(to: Routes.short_link_path(conn, :new))
+        |> redirect(to: "/")
 
       short_link ->
         Task.start(fn -> ShortLinks.update_hit_count(short_link) end)

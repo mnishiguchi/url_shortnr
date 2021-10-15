@@ -17,14 +17,14 @@ defmodule UrlShortnrWeb.Router do
   scope "/", UrlShortnrWeb do
     pipe_through :browser
 
-    live "/", ShortLinkLive.Index, :index
+    live "/", ShortLinkPublicLive, :index
+
+    live "/short_links", ShortLinkLive.Index, :index
     live "/short_links/new", ShortLinkLive.Index, :new
     live "/short_links/:id/edit", ShortLinkLive.Index, :edit
 
     live "/short_links/:id", ShortLinkLive.Show, :show
     live "/short_links/:id/show/edit", ShortLinkLive.Show, :edit
-
-    get "/:key", ShortLinkRedirectController, :index
   end
 
   # Other scopes may use custom stacks.
@@ -46,5 +46,12 @@ defmodule UrlShortnrWeb.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: UrlShortnrWeb.Telemetry
     end
+  end
+
+  # Catch-all routes must be at the end of the list.
+  scope "/", UrlShortnrWeb do
+    pipe_through :browser
+
+    get "/:key", ShortLinkRedirectController, :index
   end
 end
