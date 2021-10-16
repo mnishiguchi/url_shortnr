@@ -10,8 +10,11 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :url_shortnr, UrlShortnrWeb.Endpoint,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: nil],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  # https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#module-compile-time-configuration
+  # https://hexdocs.pm/plug/Plug.RewriteOn.html
+  force_ssl: [rewrite_on: [:x_forwarded_proto], host: nil]
 
 # Do not print debug messages in production
 config :logger, level: :info

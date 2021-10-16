@@ -10,6 +10,7 @@ defmodule UrlShortnr.Repo.Migrations.CreateShortLinks do
       timestamps()
     end
 
-    create index(:short_links, [:key], concurrently: true)
+    # https://hexdocs.pm/ecto_sql/Ecto.Migration.html#index
+    create index(:short_links, [:key], unique: true)
   end
 end
