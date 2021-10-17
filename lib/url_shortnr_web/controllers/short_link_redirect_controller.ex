@@ -13,7 +13,7 @@ defmodule UrlShortnrWeb.ShortLinkRedirectController do
         |> redirect(to: "/")
 
       short_link ->
-        Task.start(fn -> ShortLinks.update_hit_count(short_link) end)
+        Task.start(fn -> ShortLinks.increment_hit_count(short_link) end)
         redirect(conn, external: short_link.url)
     end
   end

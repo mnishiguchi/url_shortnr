@@ -101,7 +101,7 @@ defmodule UrlShortnr.ShortLinks do
     |> PubSub.broadcast_record(:short_link_updated)
   end
 
-  def update_hit_count(short_link) do
+  def increment_hit_count(short_link) do
     update_short_link(short_link, %{hit_count: short_link.hit_count + 1})
   end
 
