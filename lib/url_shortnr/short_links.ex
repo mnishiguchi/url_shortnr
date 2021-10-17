@@ -69,14 +69,14 @@ defmodule UrlShortnr.ShortLinks do
   # Generates and assigns a random key when key is blank.
   defp maybe_assign_random_key(attrs) do
     if attrs["key"] in [nil, ""] do
-      Map.put(attrs, "key", random_string(8))
+      Map.put(attrs, "key", random_string(4))
     else
       attrs
     end
   end
 
-  defp random_string(length) do
-    :crypto.strong_rand_bytes(length)
+  defp random_string(length) when is_integer(length) do
+    :crypto.strong_rand_bytes(length * 2)
     |> Base.url_encode64()
     |> String.replace(~r/[-_\=]/, "")
     |> binary_part(0, length)
