@@ -30,7 +30,7 @@ defmodule UrlShortnrWeb.ShortLinkPublicLive do
     parsed_url = URI.parse(url)
 
     app_url =
-      if Mix.env() in [:dev, :test] do
+      if Application.get_env(:url_shortnr, :env) in [:dev, :test] do
         "http://#{parsed_url.host}:#{parsed_url.port}"
       else
         "https://#{parsed_url.host}"

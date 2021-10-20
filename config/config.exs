@@ -8,6 +8,7 @@
 import Config
 
 config :url_shortnr,
+  env: Mix.env(),
   ecto_repos: [UrlShortnr.Repo]
 
 # Configures the endpoint
