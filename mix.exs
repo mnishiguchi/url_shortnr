@@ -33,6 +33,7 @@ defmodule UrlShortnr.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.6.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -49,7 +50,8 @@ defmodule UrlShortnr.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:ecto_fields, "~> 1.3"}
+      {:ecto_fields, "~> 1.3"},
+      {:swoosh, "~> 1.4"}
     ]
   end
 

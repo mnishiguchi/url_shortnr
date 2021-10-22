@@ -5,12 +5,15 @@ defmodule UrlShortnrWeb.ShortLinkPublicLive do
   alias UrlShortnr.ShortLinks.PubSub
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     if connected?(socket) do
       PubSub.subscribe()
     end
 
-    socket = assign(socket, :short_links, list_short_links())
+    socket =
+      socket
+      |> assign_current_user(session)
+      |> assign(:short_links, list_short_links())
 
     {:ok, socket, temporary_assigns: [short_links: []]}
   end
@@ -73,7 +76,9 @@ defmodule UrlShortnrWeb.ShortLinkPublicLive do
       </tbody>
     </table>
 
-    <span><%= live_patch "Admin", to: Routes.short_link_index_path(@socket, :index) %></span>
+    <%= if @current_user do %>
+      <span><%= live_patch "Admin", to: Routes.short_link_index_path(@socket, :index) %></span>
+    <% end %>
     """
   end
 

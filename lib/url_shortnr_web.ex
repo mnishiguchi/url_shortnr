@@ -47,6 +47,8 @@ defmodule UrlShortnrWeb do
       use Phoenix.LiveView,
         layout: {UrlShortnrWeb.LayoutView, "live.html"}
 
+      import UrlShortnrWeb.LiveHelpers
+
       unquote(view_helpers())
     end
   end

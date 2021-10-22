@@ -1,5 +1,8 @@
 defmodule UrlShortnrWeb.LiveHelpers do
+  import Phoenix.LiveView
   import Phoenix.LiveView.Helpers
+
+  alias UrlShortnr.Accounts
 
   @doc """
   Renders a component inside the `UrlShortnrWeb.ModalComponent` component.
@@ -19,5 +22,19 @@ defmodule UrlShortnrWeb.LiveHelpers do
     path = Keyword.fetch!(opts, :return_to)
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
     live_component(UrlShortnrWeb.ModalComponent, modal_opts)
+  end
+
+  def assign_current_user(socket, session) do
+    case session["user_token"] do
+      nil ->
+        assign(socket, current_user: nil)
+
+      user_token ->
+        assign_new(
+          socket,
+          :current_user,
+          fn -> Accounts.get_user_by_session_token(user_token) end
+        )
+    end
   end
 end
